@@ -1,9 +1,9 @@
 ---
 - name: Create /usbkey/config.inc directory
-  file: path=/usbkey/config.inc state=directory owner=root group=root mode=0755
+  file: path=/usbkey/config.inc state=directory
 
 - name: Create /root/.ssh directory
-  file: path=/usbkey/config.inc state=directory owner=root group=root mode=0700
+  file: path=/usbkey/config.inc state=directory
 
 - name: Include SSH keys in config.inc/authorized_keys
   lineinfile:
