@@ -1,0 +1,5 @@
+---
+smartos_gz_sshd_port: 22
+
+# SmartOS Global Zone Authorized Keys - YOU MUST SET THIS IN host_vars OR group_vars (or here)
+smartos_gz_sshd_root_authorized_keys: ""

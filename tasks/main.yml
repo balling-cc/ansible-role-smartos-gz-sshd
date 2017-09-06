@@ -1,0 +1,57 @@
+---
+- name: Create /usbkey/config.inc directory
+  file: path=/usbkey/config.inc state=directory owner=root group=root mode=0755
+
+- name: Create /root/.ssh directory
+  file: path=/usbkey/config.inc state=directory owner=root group=root mode=0700
+
+- name: Include SSH keys in config.inc/authorized_keys
+  lineinfile:
+    path: /usbkey/config.inc/authorized_keys
+    state: present
+    create: yes
+    backup: yes
+    line: "{{ smartos_gz_sshd_root_authorized_keys }}"
+
+- name: Include SSH keys in root/.ssh/authorized_keys
+  lineinfile:
+    path: /root/.ssh/authorized_keys
+    state: present
+    create: yes
+    backup: yes
+    line: "{{ smartos_gz_sshd_root_authorized_keys }}"
+
+- name: Include authorized_keys in config
+  lineinfile:
+    path: /usbkey/config
+    state: present
+    backup: yes
+    line: 'root_authorized_keys_file=authorized_keys'
+
+- name: Update sshd_config (Port)
+  replace:
+    path: /usbkey/ssh/sshd_config
+    regexp: '^Port.*$'
+    replace: 'Port {{ smartos_gz_sshd_port }}'
+    backup: yes
+
+- name: Update sshd_config (PasswordAuthentication)
+  replace:
+    path: /usbkey/ssh/sshd_config
+    regexp: '^PasswordAuthentication yes.*$'
+    replace: 'PasswordAuthentication no'
+    backup: yes
+
+- name: Update sshd_config (ChallengeResponseAuthentication)
+  replace:
+    path: /usbkey/ssh/sshd_config
+    regexp: '^#ChallengeResponseAuthentication.*$'
+    replace: 'ChallengeResponseAuthentication no'
+    backup: yes
+
+- name: Update sshd_config (KbdInteractiveAuthentication)
+  lineinfile:
+    path: /usbkey/ssh/sshd_config
+    state: present
+    backup: yes
+    line: 'KbdInteractiveAuthentication no'
